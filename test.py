@@ -1,7 +1,8 @@
 import torch
 from torchvision.utils import save_image
 from models.generator import Generator
-from utils.data import get_test_dataloader  # You must implement this
+from utils.facade_dataloader import get_test_dataloader  # You must implement this
+
 import os
 def test(model_path, save_dir):
     G = Generator([64, 128, 256, 512, 512, 512, 512], 512)
@@ -17,7 +18,7 @@ def test(model_path, save_dir):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', type=str, required=True)
+    parser.add_argument('--model_path', type=str, default="facades_label2photo.pth")
     parser.add_argument('--test_dir', type=str, default='dataset/val')
     parser.add_argument('--save_dir', type=str, default='test_outputs')
     args = parser.parse_args()
