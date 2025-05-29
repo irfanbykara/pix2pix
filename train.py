@@ -5,6 +5,7 @@ from losses.gan_losses import GeneratorLoss, DiscriminatorLoss
 from utils.data import get_dataloader  # Assume you implement this
 from torchvision.utils import save_image
 import os
+from utils.facade_dataloader import get_train_dataloader
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -17,6 +18,8 @@ def train(epochs, dataloader, save_dir):
 
     g_optimizer = torch.optim.Adam(G.parameters(), lr=2e-4, betas=(0.5, 0.999))
     d_optimizer = torch.optim.Adam(D.parameters(), lr=2e-4, betas=(0.5, 0.999))
+    g_scheduler = torch.optim.lr_scheduler.StepLR(g_optimizer, step_size=100, gamma=0.5)
+    d_scheduler = torch.optim.lr_scheduler.StepLR(d_optimizer, step_size=100, gamma=0.5)
 
     for epoch in range(epochs):
         for i, (input_image, real_image) in enumerate(dataloader):
@@ -41,6 +44,9 @@ def train(epochs, dataloader, save_dir):
 
             if i % 100 == 0:
                 print(f"Epoch [{epoch}/{epochs}] Step [{i}] G Loss: {g_loss.item():.4f} D Loss: {d_loss.item():.4f}")
+        # Step learning rate schedulers
+        g_scheduler.step()
+        d_scheduler.step()
 
         save_image(fake_image, os.path.join(save_dir, f"epoch_{epoch}_fake.png"))
 
@@ -48,11 +54,12 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', type=str, default='dataset/train')
-    parser.add_argument('--epochs', type=int, default=100)
-    parser.add_argument('--batch_size', type=int, default=16)
+    parser.add_argument('--epochs', type=int, default=1000)
+    parser.add_argument('--batch_size', type=int, default=2)
     parser.add_argument('--save_dir', type=str, default='outputs')
     args = parser.parse_args()
 
     os.makedirs(args.save_dir, exist_ok=True)
-    dataloader = get_dataloader(args.data_dir, batch_size=args.batch_size)
+    # dataloader = get_dataloader(args.data_dir, batch_size=args.batch_size)
+    dataloader = get_train_dataloader()
     train(args.epochs, dataloader, args.save_dir)
