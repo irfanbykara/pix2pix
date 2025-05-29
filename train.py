@@ -10,8 +10,8 @@ from utils.facade_dataloader import get_train_dataloader
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def train(epochs, dataloader, save_dir):
-    G = Generator([64, 128, 256, 512, 512, 512, 512], 512).to(device)
-    D = Discriminator().to(device)
+    generator = Generator([64, 128, 256, 512, 512, 512, 512], 512).to(device)
+    discriminator = Discriminator().to(device)
 
     g_criterion = GeneratorLoss().to(device)
     d_criterion = DiscriminatorLoss().to(device)
@@ -26,18 +26,18 @@ def train(epochs, dataloader, save_dir):
             input_image = input_image.to(device)
             real_image = real_image.to(device)
 
-            fake_image = G(input_image)
+            fake_image = generator(input_image)
             fake_pair = torch.cat([fake_image, input_image], dim=1)
             real_pair = torch.cat([real_image, input_image], dim=1)
 
             # Update discriminator
-            D.zero_grad()
+            discriminator.zero_grad()
             d_loss = d_criterion(D(fake_pair.detach()), D(real_pair))
             d_loss.backward()
             d_optimizer.step()
 
             # Update generator
-            G.zero_grad()
+            generator.zero_grad()
             g_loss = g_criterion(fake_image, real_image, D(fake_pair))
             g_loss.backward()
             g_optimizer.step()
