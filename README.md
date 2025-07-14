@@ -18,7 +18,5 @@ After training it with the default parameters given in this codebase I got some 
 <img width="518" height="260" alt="epoch_938_fake" src="https://github.com/user-attachments/assets/4533c393-312a-40db-8136-02765a38cfad" />
 <img width="518" height="260" alt="epoch_942_fake" src="https://github.com/user-attachments/assets/8041051d-119e-4ad0-8d47-4dad62220d02" />
 <img width="518" height="260" alt="epoch_974_fake" src="https://github.com/user-attachments/assets/816a3395-4a98-41de-93fa-419ffb2cf56e" />
-<img width="518" height="260" alt="epoch_974_fake" src="https://github.com/user-attachments/assets/816a3395-4a98-41de-93fa-419ffb2cf56e" />
 
 
-```bibtex @inproceedings{isola2017image, title={Image-to-image translation with conditional adversarial networks}, author={Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A}, booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition}, pages={1125--1134}, year={2017} } ``` 
